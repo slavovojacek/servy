@@ -4,5 +4,6 @@ defmodule ServyTest do
 
   test "greets the world" do
     assert Servy.hello() == :world
+    assert Servy.hello() == :hello
   end
 end
