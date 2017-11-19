@@ -14,15 +14,28 @@ defmodule Servy.Handler do
   def handle(request) do
     request
     |> parse
-    |> log
+    # |> log
     |> rewrite_path
     |> route
     |> track
     |> format_response
   end
 
+  def route(%Conv{ method: "GET", path: "/kaboom" } = conv) do
+    raise "Kaboom!"
+  end
+
+  def route(%Conv{ method: "GET", path: "/hibernate/" <> time } = conv) do
+    time |> String.to_integer |> :timer.sleep
+    %{ conv | status: 200, resp_body: "Awake!" }
+  end
+
   def route(%Conv{ method: "GET", path: "/wildthings" } = conv) do
     %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
+  end
+
+  def route(%Conv{ method: "GET", path: "/api/bears" } = conv) do
+    Servy.Api.BearController.index(conv)
   end
 
   def route(%Conv{ method: "GET", path: "/bears" } = conv) do
@@ -64,7 +77,7 @@ defmodule Servy.Handler do
   def format_response(%Conv{} = conv) do
     """
     HTTP/1.1 #{Conv.full_status(conv)}\r
-    Content-Type: text/html\r
+    Content-Type: #{conv.resp_content_type}\r
     Content-Length: #{String.length(conv.resp_body)}\r
     \r
     #{conv.resp_body}

@@ -8,13 +8,11 @@ defmodule Servy do
 
   ## Examples
 
-      iex> Servy.hello
-      :world
+      iex> Servy.hello("World")
+      "Howdy, World!"
 
   """
   def hello(name) do
     "Howdy, #{name}!"
   end
 end
-
-# IO.puts Servy.hello("Elixir")
