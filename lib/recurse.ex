@@ -6,6 +6,6 @@ defmodule Recurse do
   def map([], _), do: []
 end
 
-double = fn(x) -> x * 2 end
+double = fn x -> x * 2 end
 
-IO.inspect Recurse.map([1, 2, 3, 4, 5], double)
+IO.inspect(Recurse.map([1, 2, 3, 4, 5], double))
