@@ -1,14 +1,16 @@
 defmodule Servy.PledgeServer do
   @name :pledge_server
 
-  use GenServer
+  use GenServer, restart: :temporary
 
   defmodule State do
     defstruct cache_size: 3, pledges: []
   end
 
-  def start do
-    IO.puts("Starting the pledge server...")
+  # Client Interface
+
+  def start_link(_arg) do
+    IO.puts("Starting the Pledge Server ...")
     GenServer.start(__MODULE__, %State{}, name: @name)
   end
 
@@ -31,6 +33,8 @@ defmodule Servy.PledgeServer do
   def clear do
     GenServer.cast(@name, :clear)
   end
+
+  # Server Interface
 
   def init(state) do
     pledges = fetch_recent_pledges()
